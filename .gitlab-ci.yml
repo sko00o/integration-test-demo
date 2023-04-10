@@ -32,4 +32,4 @@ test_app:
   tags:
     - gitlab-org-docker
   script:
-    - cd app && go test ./...
+    - make test-app
