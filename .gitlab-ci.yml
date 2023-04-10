@@ -1,9 +1,5 @@
 image: golang:1.19
 
-cache:
-  paths:
-    - /go/pkg/mod
-
 # DinD service is required for Testcontainers
 services:
   - name: docker:dind
@@ -21,8 +17,18 @@ variables:
 stages:
   - test
 
+.go-cache:
+  variables:
+    GOMODCACHE: $CI_PROJECT_DIR/.cache
+  before_script:
+    - mkdir -p .cache
+  cache:
+    paths:
+      - .cache
+
 test_app:
   stage: test
+  extends: .go-cache
   tags:
     - gitlab-org-docker
   script:
