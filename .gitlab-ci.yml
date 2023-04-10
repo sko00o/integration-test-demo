@@ -1,0 +1,29 @@
+image: golang:1.19
+
+cache:
+  paths:
+    - /go/pkg/mod
+
+# DinD service is required for Testcontainers
+services:
+  - name: docker:dind
+    # explicitly disable tls to avoid docker startup interruption
+    command: ["--tls=false"]
+
+variables:
+  # Instruct Testcontainers to use the daemon of DinD, use port 2735 for non-tls connections.
+  DOCKER_HOST: "tcp://docker:2375"
+  # Instruct Docker not to start over TLS.
+  DOCKER_TLS_CERTDIR: ""
+  # Improve performance with overlayfs.
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - test
+
+test_app:
+  stage: test
+  tags:
+    - gitlab-org-docker
+  script:
+    - cd app && go test ./...
