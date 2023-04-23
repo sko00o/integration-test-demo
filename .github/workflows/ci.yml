@@ -29,4 +29,5 @@ jobs:
 
       - name: Test in ./app
         run: |
+          make build
           make test-app
