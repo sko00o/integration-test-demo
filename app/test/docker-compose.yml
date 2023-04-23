@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  app:
+    restart: unless-stopped
+    pull_policy: build
+    build:
+      context: ../
+      # require run `make build` first
+      dockerfile: Dockerfile
+    volumes:
+      - "./etc:/app/etc:ro"
+    command: >
+      -c /app/etc/config.yaml
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "8080"
+
+  redis:
+    image: redis:5
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3

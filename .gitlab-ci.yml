@@ -32,4 +32,5 @@ test_app:
   tags:
     - gitlab-org-docker
   script:
+    - make build
     - make test-app

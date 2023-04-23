@@ -11,3 +11,7 @@ gitlab-runner:
   -v "/var/run/docker.sock:/var/run/docker.sock" \
   gitlab/gitlab-runner:latest \
   -c 'git config --global --add safe.directory "*"; gitlab-runner exec docker --docker-privileged test_app'
+
+.PHONY: build
+build:
+	cd app && go build -o app
