@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go"
@@ -18,7 +19,8 @@ type TestSuite struct {
 
 func (s *TestSuite) SetupSuite() {
 	cfg := Config{
-		Addrs: []string{s.redis.Addr},
+		Addrs:       []string{s.redis.Addr},
+		KeyExpireIn: time.Hour,
 	}
 	storage, err := New(cfg)
 	s.NoError(err)

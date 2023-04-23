@@ -12,14 +12,13 @@ func (s *TestSuite) TestIncr() {
 	cnt := int64(2000)
 	size := int64(2)
 	total := cnt * size
-	ttl := time.Hour
 
 	var wg sync.WaitGroup
 	for i := int64(0); i < cnt; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			err := s.Storage.Incr(ctx, "counter:12345", "1", size, ttl)
+			err := s.Storage.Incr(ctx, Info{"counter:12345", "1", size})
 			s.Assert().NoError(err)
 
 			time.Sleep(time.Second)
@@ -28,7 +27,7 @@ func (s *TestSuite) TestIncr() {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			err := s.Storage.Incr(ctx, "counter:12345", "0", size, ttl)
+			err := s.Storage.Incr(ctx, Info{"counter:12345", "0", size})
 			s.Assert().NoError(err)
 
 			time.Sleep(time.Second)
